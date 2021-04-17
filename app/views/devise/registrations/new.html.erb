@@ -10,6 +10,10 @@
   </div>
 
   <div class="field">
+      <%= f.label :name, 'Имя' %><br />
+      <%= f.text_field :name, required: true %>
+  </div>
+  <div class="field">
     <%= f.label :password, 'Пароль' %>
     <% if @minimum_password_length %>
     <em>(<%= @minimum_password_length %> символов минимум)</em>
@@ -23,7 +27,7 @@
   </div>
 
   <div class="actions">
-    <%= f.submit "Зарегистрироваться" %>
+    <%= f.submit "Зарегистрироваться", class: 'btn btn-success mt-3', style: 'border-radius: 18px; width: 20%' %>
   </div>
 <% end %>
 

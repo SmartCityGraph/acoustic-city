@@ -5,7 +5,7 @@ class PointsController < ApplicationController
   end
 
   def create
-    Point.create(point_params)
+    current_user.points.create(point_params)
     redirect_to root_path
   end
 
@@ -14,11 +14,13 @@ class PointsController < ApplicationController
   end
 
   def update
+    redirect_to points_path unless @point.user == current_user
     @point.update(point_params)
     redirect_to points_path
   end
 
   def destroy
+    redirect_to points_path unless @point.user == current_user
     @point.destroy
     redirect_to points_path
   end

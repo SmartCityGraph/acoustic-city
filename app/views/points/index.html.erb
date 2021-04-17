@@ -1,6 +1,7 @@
 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
   <thead>
   <tr>
+    <th scope="col">Автор</th>
     <th scope="col">Громкость</th>
     <th scope="col">Частота</th>
     <th scope="col">Продолжительность измерений</th>
@@ -14,14 +15,15 @@
   <tbody>
   <% @points.each do |point| %>
     <tr>
+      <td><%= point.user&.name %></td>
       <td><%= point.decibel %></td>
       <td><%= point.frequency %></td>
       <td><%= point.minutes %></td>
       <td><%= point.comment %></td>
       <td><%= point.lat.round(5) if point.lat %>, <%= point.lon.round(5) if point.lon %></td>
       <td><%= point.created_at.strftime("%Y-%m-%d") %></td>
-      <td><%= link_to '>', edit_point_path(point), class: 'btn btn-secondary' %></td>
-      <td><%= link_to '-', point_path(point), method: :delete, class: 'btn btn-danger' %></td>
+      <td><%= link_to '>', edit_point_path(point), class: 'btn btn-secondary' if point.user == current_user %></td>
+      <td><%= link_to '-', point_path(point), method: :delete, class: 'btn btn-danger' if point.user == current_user %></td>
     </tr>
   <% end %>
   </tbody>
