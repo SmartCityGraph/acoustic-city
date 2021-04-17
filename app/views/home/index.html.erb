@@ -1,6 +1,10 @@
 
 <div id="map"></div>
-
+<div class="text-center">
+  <button class="btn" style="background: #31fc03"></button> - 30-60 дБ,
+  <button class="btn" style="background: #fce803"></button> - 61-90 дБ,
+  <button class="btn" style="background: #fc0320"></button> - более 90 дБ
+</div>
 <div class="text-center">
   <%= link_to 'Добавить точку', add_path, class: 'btn btn-success mt-3', style: 'border-radius: 18px; width: 80%' %>
   <%= link_to 'Все точки', points_path, class: 'btn btn-secondary mt-3', style: 'border-radius: 18px; width: 80%' %>
@@ -141,7 +145,9 @@
     initMap();
 
     function setMarkers() {
-        console.log('setted')
+        var infowindow = new google.maps.InfoWindow({
+            size: new google.maps.Size(150, 50)
+        });
         <% @points.each do |point| %>
           marker<%= point.id %> = new google.maps.Marker(
               {
@@ -154,10 +160,15 @@
                       strokeColor: '#000',
                       strokeWeight: 1,
                       scale: 8,
-
                   }
               });
+        marker<%= point.id %>.addListener('click', function(event) {
+            infowindow.setContent("<h3><%= point.decibel %> дБ</h3>");
+            infowindow.setPosition(event.latLng);
+            infowindow.open(map);
+        });
         <% end %>
+
     }
 
 
