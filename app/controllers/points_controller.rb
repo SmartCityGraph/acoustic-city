@@ -1,5 +1,5 @@
 class PointsController < ApplicationController
-  before_action :set_point, only: [:edit, :update]
+  before_action :set_point, only: [:edit, :update, :destroy]
   def index
     @points = Point.all
   end
@@ -15,6 +15,11 @@ class PointsController < ApplicationController
 
   def update
     @point.update(point_params)
+    redirect_to points_path
+  end
+
+  def destroy
+    @point.destroy
     redirect_to points_path
   end
 

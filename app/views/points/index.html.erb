@@ -8,6 +8,7 @@
     <th scope="col">Координаты</th>
     <th scope="col">Дата</th>
     <th scope="col">Ред.</th>
+    <th scope="col">Удалить</th>
   </tr>
   </thead>
   <tbody>
@@ -20,6 +21,7 @@
       <td><%= point.lat.round(5) if point.lat %>, <%= point.lon.round(5) if point.lon %></td>
       <td><%= point.created_at.strftime("%Y-%m-%d") %></td>
       <td><%= link_to '>', edit_point_path(point), class: 'btn btn-secondary' %></td>
+      <td><%= link_to '-', point_path(point), method: :delete, class: 'btn btn-danger' %></td>
     </tr>
   <% end %>
   </tbody>

@@ -3,8 +3,8 @@
 
 <div class="text-center">
   <%= link_to 'Добавить точку', add_path, class: 'btn btn-success mt-3', style: 'border-radius: 18px; width: 80%' %>
-
   <%= link_to 'Все точки', points_path, class: 'btn btn-secondary mt-3', style: 'border-radius: 18px; width: 80%' %>
+  <%= link_to 'Экспорт csv', get_csv_path, class: 'btn btn-secondary mt-3', style: 'border-radius: 18px; width: 80%' %>
 </div>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm2rSuphVK9QJyiyPkd4LN1SQj7yeMnw0&region=RU&&libraries=places"></script>
 <style>
@@ -146,7 +146,16 @@
           marker<%= point.id %> = new google.maps.Marker(
               {
                   map: map,
-                  position: {lat: <%= point.lat %>, lng: <%= point.lon %>}
+                  position: {lat: <%= point.lat %>, lng: <%= point.lon %>},
+                  icon: {
+                      path: google.maps.SymbolPath.CIRCLE,
+                      fillColor: '<%= get_color(point) %>',
+                      fillOpacity: 1,
+                      strokeColor: '#000',
+                      strokeWeight: 1,
+                      scale: 8,
+
+                  }
               });
         <% end %>
     }
