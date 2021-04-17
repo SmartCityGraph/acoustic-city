@@ -1,41 +1,78 @@
-<h1 class="text-center display-1">Добавить точку</h1>
+<h3 class="text-center ">Добавить точку</h3>
 <div class="container-lg">
   <div id="map"></div>
+  <p>Координаты точки: <div id=coords></div></p>
   <%= form_for @point do |f| %>
-    <h3 class="display-3">Введите показания</h3>
+    <h5 >Введите показания</h5>
     <div class="form-group">
-      <%= f.text_field :decibel, class: 'form-control', placeholder: 'Среднее значение (дБ)' %>
+      <%= f.text_field :decibel, class: 'form-control form-control-lg', placeholder: 'Среднее значение (дБ)' %>
+    </div>
+    <div class="form-group">
+      <%= f.text_field :frequency, class: 'form-control form-control-lg', placeholder: 'Частота' %>
+    </div>
+    <div class="form-group">
+      <%= f.text_field :minutes, class: 'form-control form-control-lg', placeholder: 'Продолжительность измерений (мин)' %>
+    </div>
+    <div class="form-group">
+      <%= f.text_field :comment, class: 'form-control form-control-lg', placeholder: 'Комментарий' %>
+    </div>
+    <%= f.hidden_field :lat, id: 'form_lat', value: 0 %>
+    <%= f.hidden_field :lon, id: 'form_lon', value: 0 %>
+    <div class="text-center">
+    <%= f.submit 'Сохранить', class: 'btn btn-success', style: 'border-radius: 18px; width: 80%' %>
     </div>
   <% end %>
 </div>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm2rSuphVK9QJyiyPkd4LN1SQj7yeMnw0&region=RU&&libraries=places"></script>
 <style>
     #map {
-        height: 800px;
+        height: 400px;
         width: 100%;
     }
 </style>
 <script>
-
+    let map, infoWindow;
     var pos;
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 19,
-    });
+    var marker;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: -34.397, lng: 150.644 },
+            zoom: 19,
+        });
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        };
+                        map.setCenter(pos);
+                        pos = new google.maps.LatLng(pos.lat, pos.lng);
+                        setMarker();
+                        updateFields();
+                    },
+                    () => {
+                        handleLocationError(true, infoWindow, map.getCenter());
+                    }
+                );
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
 
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            alert("Geolocation is not supported by this browser.");
-        }
     }
-    function showPosition(position) {
-        var lat = position.coords.latitude;
-        var lng = position.coords.longitude;
-        pos = new google.maps.LatLng(lat, lng)
-        map.setCenter(pos);
-        setMarker();
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(
+            browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation."
+        );
+        infoWindow.open(map);
     }
+
+    initMap();
 
     function setMarker() {
         marker = new google.maps.Marker(
@@ -46,32 +83,15 @@
                 position: pos
             });
 
-
         google.maps.event.addListener(marker, 'dragend', function () {
-            geocodePosition(marker.getPosition());
+            updateFields();
         });
     }
-    function geocodePosition(pos)
-    {
-        geocoder = new google.maps.Geocoder();
-        geocoder.geocode
-        ({
-                latLng: pos
-            },
-            function(results, status)
-            {
-                if (status == google.maps.GeocoderStatus.OK)
-                {
-                    $("#mapSearchInput").val(results[0].formatted_address);
-                    $("#mapErrorMsg").hide(100);
-                }
-                else
-                {
-                    $("#mapErrorMsg").html('Cannot determine address at this location.'+status).show(100);
-                }
-            }
-        );
+    function updateFields() {
+        $('#coords').html(marker.getPosition().lat() + ', ' + marker.getPosition().lng())
+        $('#form_lat').val(marker.getPosition().lat())
+        $('#form_lon').val(marker.getPosition().lng())
     }
 
-    getLocation();
+
 </script>
