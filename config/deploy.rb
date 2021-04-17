@@ -20,6 +20,7 @@ set :bundle_path,                   -> { shared_path.join('vendor/bundle') }
 set :rvm_ruby_version,              "2.6.4"
 
 set :puma_init_active_record,       true
+
 #before 'deploy:starting', 'postgres:backup:create'
 
 #before 'deploy:starting', 'postgres:backup:create'

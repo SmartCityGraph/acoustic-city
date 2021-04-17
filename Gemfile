@@ -29,10 +29,10 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
-  gem 'capistrano'
+  gem 'capistrano', '3.14.0'
   gem 'capistrano-rails'
-  gem 'capistrano-bundler'
-  gem 'capistrano-rvm'
+  gem 'capistrano-bundler', '1.6.0'
+  gem 'capistrano-rvm', '0.1.2'
   gem 'capistrano3-puma'
   gem 'capistrano-sidekiq'
   gem 'capistrano3-postgres', require: false
