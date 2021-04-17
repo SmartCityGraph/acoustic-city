@@ -1,4 +1,5 @@
 server '94.130.184.14', user: 'deployer', roles: %w[web app db] # prod
+set :branch, 'master'
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
