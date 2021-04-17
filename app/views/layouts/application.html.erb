@@ -27,6 +27,12 @@
         <li class="nav-item active">
           <%= link_to 'Экспорт csv', get_csv_path, class: 'nav-link' %>
         </li>
+        <li class="nav-item active">
+          <%= link_to 'Профиль', edit_registration_path(current_user), class: 'nav-link' %>
+        </li>
+        <li class="nav-item active">
+          <%= link_to 'Выход', destroy_user_session_path, method: :delete, class: 'nav-link' %>
+        </li>
       </ul>
     </div>
   </nav>
