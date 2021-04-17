@@ -1,37 +1,73 @@
 
 <div id="map"></div>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
-  Launch demo modal
-</button>
 
-<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
+<div class="text-center">
+  <%= link_to 'Добавить точку', add_path, class: 'btn btn-success mt-3', style: 'border-radius: 18px; width: 80%' %>
+
+  <%= link_to 'Все точки', points_path, class: 'btn btn-secondary mt-3', style: 'border-radius: 18px; width: 80%' %>
 </div>
-
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm2rSuphVK9QJyiyPkd4LN1SQj7yeMnw0&region=RU&&libraries=places"></script>
 <style>
     #map {
-        height: 800px;
+        height: 600px;
         width: 100%;
     }
 </style>
 <script>
+
+    var map, infoWindow;
+    var pos;
+    var marker;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: -34.397, lng: 150.644 },
+            zoom: 19,
+        });
+        setMarkers();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    map.setCenter(pos);
+                    pos = new google.maps.LatLng(pos.lat, pos.lng);
+                },
+                () => {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                }
+            );
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+        }
+
+    }
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(
+            browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation."
+        );
+        infoWindow.open(map);
+    }
+
+    initMap();
+
+    function setMarkers() {
+        console.log('setted')
+        <% @points.each do |point| %>
+          marker<%= point.id %> = new google.maps.Marker(
+              {
+                  map: map,
+                  position: {lat: <%= point.lat %>, lng: <%= point.lon %>}
+              });
+        <% end %>
+    }
+
 
 
 

@@ -1,0 +1,20 @@
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+  <thead>
+  <tr>
+    <th scope="col">Громкость</th>
+    <th scope="col">Частота</th>
+    <th scope="col">Дата</th>
+    <th scope="col">Ред.</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @points.each do |point| %>
+    <tr>
+      <td><%= point.decibel %></td>
+      <td><%= point.frequency %></td>
+      <td><%= point.created_at %></td>
+      <td><%= link_to '>', edit_point_path(point), class: 'btn btn-secondary' %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
