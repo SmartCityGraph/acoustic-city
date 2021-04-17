@@ -3,6 +3,9 @@
   <tr>
     <th scope="col">Громкость</th>
     <th scope="col">Частота</th>
+    <th scope="col">Продолжительность измерений</th>
+    <th scope="col">Комментарий</th>
+    <th scope="col">Координаты</th>
     <th scope="col">Дата</th>
     <th scope="col">Ред.</th>
   </tr>
@@ -12,7 +15,10 @@
     <tr>
       <td><%= point.decibel %></td>
       <td><%= point.frequency %></td>
-      <td><%= point.created_at %></td>
+      <td><%= point.minutes %></td>
+      <td><%= point.comment %></td>
+      <td><%= point.lat.round(5) if point.lat %>, <%= point.lon.round(5) if point.lon %></td>
+      <td><%= point.created_at.strftime("%Y-%m-%d") %></td>
       <td><%= link_to '>', edit_point_path(point), class: 'btn btn-secondary' %></td>
     </tr>
   <% end %>
