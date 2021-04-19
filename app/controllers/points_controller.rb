@@ -14,7 +14,7 @@ class PointsController < ApplicationController
   end
 
   def update
-    redirect_to points_path unless @point.user == current_user
+    #redirect_back(fallback_location: root_path) unless @point.user == current_user
     @point.update(point_params)
     redirect_to points_path
   end

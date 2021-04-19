@@ -21,8 +21,8 @@
       <td><%= point.minutes %></td>
       <td><%= point.comment %></td>
       <td><%= point.lat.round(5) if point.lat %>, <%= point.lon.round(5) if point.lon %></td>
-      <td><%= point.created_at.strftime("%Y-%m-%d") %></td>
-      <td><%= link_to '>', edit_point_path(point), class: 'btn btn-secondary' if point.user == current_user %></td>
+      <td><%= point.created_at.in_time_zone("Moscow").strftime("%Y-%m-%d %k:%M") %></td>
+      <td><%= link_to '>', edit_point_path(point), class: 'btn btn-secondary' %></td>
       <td><%= link_to '-', point_path(point), method: :delete, class: 'btn btn-danger' if point.user == current_user %></td>
     </tr>
   <% end %>
