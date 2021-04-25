@@ -24,7 +24,7 @@
     var marker;
     function initMap() {
         map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: -34.397, lng: 150.644 },
+            center: { lat: <%= @points.last.lat %>, lng: <%= @points.last.lon %> },
             zoom: 19,
             styles: [
                 {
@@ -111,24 +111,7 @@
             ]
         });
         setMarkers();
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    };
-                    map.setCenter(pos);
-                    pos = new google.maps.LatLng(pos.lat, pos.lng);
-                },
-                () => {
-                    handleLocationError(true, infoWindow, map.getCenter());
-                }
-            );
-        } else {
-            // Browser doesn't support Geolocation
-            handleLocationError(false, infoWindow, map.getCenter());
-        }
+
 
     }
 
@@ -163,7 +146,7 @@
                   }
               });
         marker<%= point.id %>.addListener('click', function(event) {
-            infowindow.setContent("<h3><%= point.decibel %> дБ</h3>");
+            infowindow.setContent("<h4><%= point.decibel %> дБ</h3> <a class='btn btn-secondary' href='<%= edit_point_path(point) %>' target='_blank'>Ред</a>");
             infowindow.setPosition(event.latLng);
             infowindow.open(map);
         });
