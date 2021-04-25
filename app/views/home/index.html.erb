@@ -1,6 +1,7 @@
 
 <div id="map"></div>
 <div class="text-center">
+  <button id="add_pin" class="btn" style="background: #03fcf4">Добавить точку</button>
   <button class="btn" style="background: #31fc03"></button> - 30-60 дБ,
   <button class="btn" style="background: #fce803"></button> - 61-90 дБ,
   <button class="btn" style="background: #fc0320"></button> - более 90 дБ
@@ -154,7 +155,25 @@
 
     }
 
-
+  $("#add_pin").click(function() {
+      var new_marker = new google.maps.Marker({
+          position: {lat: map.getCenter().lat(), lng: map.getCenter().lng()},
+          map: map,
+          draggable: true
+      });
+      var infowindow = new google.maps.InfoWindow({
+          size: new google.maps.Size(250, 150)
+      });
+      new_marker.addListener('click', function(event) {
+          infowindow.setContent("<form action='/points' method='post'><input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'> <input class='form-control' placeholder='Среднее значение (дБ)' type='text' name='point[decibel]' id='point_decibel'> <input id='form_lat' type='hidden' name='point[lat]' value='" +
+              map.getCenter().lat()
+              + "'> <input id='form_lon' type='hidden' name='point[lon]' value='" +
+              map.getCenter().lng()
+              + "'> <input type='submit' name='commit' value='Сохранить' class='btn btn-success' data-disable-with='Сохранить'></form>");
+          infowindow.setPosition(event.latLng);
+          infowindow.open(map);
+      });
+  });
 
 
 </script>
