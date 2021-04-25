@@ -303,7 +303,7 @@
     heatmap = new HeatmapOverlay(map,
         {
             // radius should be small ONLY if scaleRadius is true (or small radius is intended)
-            "radius": 0.001,
+            "radius": <%= params[:radius] ? params[:radius] : 0.001 %>,
             "maxOpacity": 1,
             // scales the radius based on map zoom
             "scaleRadius": true,
@@ -321,7 +321,7 @@
     );
 
     var testData = {
-        max: 9999,
+        max: 99999,
         data: [
             <% @points.each do |point| %>
               {lat: <%= point.lat %>, lng:<%= point.lon %>, count: <%= point.decibel %>},
