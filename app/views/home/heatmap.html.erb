@@ -304,7 +304,7 @@
         {
             // radius should be small ONLY if scaleRadius is true (or small radius is intended)
             "radius": <%= params[:radius] ? params[:radius] : 0.001 %>,
-            "maxOpacity": 1,
+            "maxOpacity": 0.5,
             // scales the radius based on map zoom
             "scaleRadius": true,
             // if set to false the heatmap uses the global maximum for colorization

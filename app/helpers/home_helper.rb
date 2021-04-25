@@ -1,11 +1,11 @@
 module HomeHelper
   def get_color(point)
     case point.decibel
-    when 30..60
+    when 0..50
       '#31fc03'
-    when 61..90
+    when 51..70
       '#fce803'
-    when 90..999
+    when 70..999
       '#fc0320'
     else
       '#030303'
