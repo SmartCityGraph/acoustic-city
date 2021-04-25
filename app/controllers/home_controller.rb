@@ -12,6 +12,10 @@ class HomeController < ApplicationController
     send_data csv, :type => 'text/csv; charset=utf-8; header=present', :disposition => "attachment; filename=#{Date.today}.csv"
   end
 
+  def heatmap
+    @points = Point.where.not(lat: [nil, 0.0], lon: [nil, 0.0])
+  end
+
   private
   require 'csv'
   def to_csv(collection)

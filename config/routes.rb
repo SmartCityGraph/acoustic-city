@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   get :add, to: "home#add"
   resources :points
   get :get_csv, to: "home#get_csv"
+  get :heatmap, to: "home#heatmap"
 end
