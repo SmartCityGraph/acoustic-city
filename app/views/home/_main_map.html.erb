@@ -1,0 +1,268 @@
+<div id="map"></div>
+<div class="text-center">
+  <button id="style" class="btn" style="background: #fcf003">Светлый стиль</button>
+  <button id="add_pin" class="btn" style="background: #03fcf4">Добавить точку</button>
+  <button class="btn" style="background: #31fc03"></button> - 30-60 дБ,
+  <button class="btn" style="background: #fce803"></button> - 61-90 дБ,
+  <button class="btn" style="background: #fc0320"></button> - более 90 дБ
+</div>
+<div class="text-center">
+  <%= link_to 'Добавить точку', add_path, class: 'btn btn-success mt-3', style: 'border-radius: 18px; width: 80%' %>
+  <%= link_to 'Все точки', points_path, class: 'btn btn-secondary mt-3', style: 'border-radius: 18px; width: 80%' %>
+  <%= link_to 'Экспорт csv', get_csv_path, class: 'btn btn-secondary mt-3', style: 'border-radius: 18px; width: 80%' %>
+</div>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm2rSuphVK9QJyiyPkd4LN1SQj7yeMnw0&region=RU&&libraries=places"></script>
+<style>
+    #map {
+        height: 600px;
+        width: 100%;
+    }
+</style>
+<script>
+
+    var map, infoWindow;
+    var pos;
+    var marker;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: <%= @points.last.lat %>, lng: <%= @points.last.lon %> },
+            zoom: 19,
+            styles: [
+                {
+                    "featureType": "all",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "invert_lightness": true
+                        },
+                        {
+                            "saturation": "-9"
+                        },
+                        {
+                            "lightness": "0"
+                        },
+                        {
+                            "visibility": "simplified"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "landscape.man_made",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "weight": "1.00"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "weight": "0.49"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "labels",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        },
+                        {
+                            "weight": "0.01"
+                        },
+                        {
+                            "lightness": "-7"
+                        },
+                        {
+                            "saturation": "-35"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "labels.text",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "labels.text.stroke",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "labels.icon",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        }
+                    ]
+                }
+            ]
+        });
+        setMarkers();
+
+
+    }
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(
+            browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation."
+        );
+        infoWindow.open(map);
+    }
+
+    initMap();
+
+    function setMarkers() {
+        var infowindow = new google.maps.InfoWindow({
+            size: new google.maps.Size(150, 50)
+        });
+        <% @points.each do |point| %>
+        marker<%= point.id %> = new google.maps.Marker(
+            {
+                map: map,
+                position: {lat: <%= point.lat %>, lng: <%= point.lon %>},
+                label: '<%= point.decibel.round %>',
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillColor: '<%= get_color(point) %>',
+                    fillOpacity: 0.6,
+                    strokeColor: '#000',
+                    strokeWeight: 1,
+                    scale: 16,
+                }
+            });
+        marker<%= point.id %>.addListener('click', function(event) {
+            infowindow.setContent("<h4><%= point.decibel %> дБ</h3> <a class='btn btn-secondary' href='<%= edit_point_path(point) %>' target='_blank'>Ред</a>");
+            infowindow.setPosition(event.latLng);
+            infowindow.open(map);
+        });
+        <% end %>
+
+    }
+
+    $("#add_pin").click(function() {
+        var new_marker = new google.maps.Marker({
+            position: {lat: map.getCenter().lat(), lng: map.getCenter().lng()},
+            map: map,
+            draggable: true
+        });
+        var infowindow = new google.maps.InfoWindow({
+            size: new google.maps.Size(250, 150)
+        });
+        new_marker.addListener('click', function(event) {
+            infowindow.setContent("<form action='/points' method='post'><input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'> <input class='form-control' placeholder='Среднее значение (дБ)' type='text' name='point[decibel]' id='point_decibel'> <input id='form_lat' type='hidden' name='point[lat]' value='" +
+                map.getCenter().lat()
+                + "'> <input id='form_lon' type='hidden' name='point[lon]' value='" +
+                map.getCenter().lng()
+                + "'> <br /> <input type='submit' name='commit' value='Сохранить' class='btn btn-success' data-disable-with='Сохранить'></form>");
+            infowindow.setPosition(event.latLng);
+            infowindow.open(map);
+        });
+    });
+
+    $("#style").click(function() {
+        if (map.styles[0]['stylers'][0].invert_lightness) {
+            map.setOptions({styles: [
+                    {
+                        "featureType": "all",
+                        "elementType": "all",
+                        "stylers": [
+                            {
+                                "invert_lightness": false
+                            },
+                            {
+                                "saturation": "-9"
+                            },
+                            {
+                                "lightness": "0"
+                            },
+                            {
+                                "visibility": "simplified"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "landscape.man_made",
+                        "elementType": "all",
+                        "stylers": [
+                            {
+                                "weight": "1.00"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "all",
+                        "stylers": [
+                            {
+                                "weight": "0.49"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "labels",
+                        "stylers": [
+                            {
+                                "visibility": "on"
+                            },
+                            {
+                                "weight": "0.01"
+                            },
+                            {
+                                "lightness": "-7"
+                            },
+                            {
+                                "saturation": "-35"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "labels.text",
+                        "stylers": [
+                            {
+                                "visibility": "on"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "labels.text.stroke",
+                        "stylers": [
+                            {
+                                "visibility": "off"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "labels.icon",
+                        "stylers": [
+                            {
+                                "visibility": "on"
+                            }
+                        ]
+                    }
+                ]});
+        }
+    });
+
+
+</script>

@@ -4,6 +4,11 @@ class HomeController < ApplicationController
     @points = Point.where.not(lat: [nil, 0.0], lon: [nil, 0.0], decibel: nil).order(:id)
   end
 
+  def ordinary
+    @point = Point.new
+    @points = Point.where(by_hand: false).where.not(lat: [nil, 0.0], lon: [nil, 0.0], decibel: nil).order(:id)
+  end
+
   def add
     @point = Point.new
   end

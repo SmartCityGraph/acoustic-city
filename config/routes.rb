@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   resources :points
   get :get_csv, to: "home#get_csv"
   get :heatmap, to: "home#heatmap"
+  get :ordinary, to: "home#ordinary"
 end

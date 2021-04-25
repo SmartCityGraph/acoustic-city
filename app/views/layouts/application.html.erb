@@ -30,6 +30,9 @@
         <li class="nav-item active">
           <%= link_to 'Heatmap', heatmap_path(radius: 0.005), class: 'nav-link' %>
         </li>
+        <li class="nav-item active">
+          <%= link_to 'Обычные точки', ordinary_path, class: 'nav-link' %>
+        </li>
         <% if current_user %>
           <li class="nav-item active">
             <%= link_to 'Профиль', edit_registration_path(current_user), class: 'nav-link' %>
