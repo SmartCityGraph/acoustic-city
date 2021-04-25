@@ -167,9 +167,9 @@
         });
         new_marker.addListener('click', function(event) {
             infowindow.setContent("<form action='/points' method='post'><input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'> <input class='form-control' placeholder='Среднее значение (дБ)' type='text' name='point[decibel]' id='point_decibel'> <input id='form_lat' type='hidden' name='point[lat]' value='" +
-                map.getCenter().lat()
+                event.latLng.lat()
                 + "'> <input id='form_lon' type='hidden' name='point[lon]' value='" +
-                map.getCenter().lng()
+                event.latLng.lng()
                 + "'> <br /> <input type='submit' name='commit' value='Сохранить' class='btn btn-success' data-disable-with='Сохранить'></form>");
             infowindow.setPosition(event.latLng);
             infowindow.open(map);
