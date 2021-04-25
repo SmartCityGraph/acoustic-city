@@ -1,6 +1,7 @@
 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
   <thead>
   <tr>
+    <th scope="col"><%= sort_link(@q, :id) %></th>
     <th scope="col">Автор</th>
     <th scope="col">Громкость</th>
     <th scope="col">Частота</th>
@@ -15,6 +16,7 @@
   <tbody>
   <% @points.each do |point| %>
     <tr>
+      <td><%= point.id %></td>
       <td><%= point.user&.name %></td>
       <td><%= point.decibel %></td>
       <td><%= point.frequency %></td>
@@ -28,3 +30,4 @@
   <% end %>
   </tbody>
 </table>
+<%= paginate @points, theme: 'twitter-bootstrap-4' %>

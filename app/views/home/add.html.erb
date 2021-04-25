@@ -3,48 +3,7 @@
   <div id="map"></div>
   <p>Координаты точки: <div id=coords></div></p>
   <%= form_for @point do |f| %>
-    <h5 >Введите показания</h5>
-    <div class="form-group">
-      <%= f.text_field :decibel, class: 'form-control', placeholder: 'Среднее значение (дБ)' %>
-    </div>
-    <div class="form-group">
-      <%= f.text_field :frequency, class: 'form-control', placeholder: 'Частота' %>
-    </div>
-    <div class="form-group">
-      <%= f.text_field :minutes, class: 'form-control', placeholder: 'Продолжительность измерений (мин)' %>
-    </div>
-    <div class="form-group">
-      <%= f.text_field :comment, class: 'form-control', placeholder: 'Комментарий' %>
-    </div>
-    <div class="form-group">
-      <%= f.check_box :wind %>
-      <%= f.label :wind, 'во время измерения был сильный ветер' %>
-    </div>
-    <div class="form-group">
-      <%= f.check_box :park %>
-      <%= f.label :park, 'измерение проведено в парке' %>
-    </div>
-    <div class="form-group">
-      <%= f.check_box :shosse %>
-      <%= f.label :shosse, 'измерение проведено рядом с трассой' %>
-    </div>
-    <div class="form-group">
-      <%= f.check_box :road %>
-      <%= f.label :road, 'измерение проведено рядом с дорогой' %>
-    </div>
-    <div class="form-group">
-      <%= f.check_box :yard %>
-      <%= f.label :yard, 'измерение проведено во дворе' %>
-    </div>
-    <div class="form-group">
-      <%= f.check_box :building %>
-      <%= f.label :building, 'измерение проведено в помещении' %>
-    </div>
-    <%= f.hidden_field :lat, id: 'form_lat' %>
-    <%= f.hidden_field :lon, id: 'form_lon' %>
-    <div class="text-center">
-    <%= f.submit 'Сохранить', class: 'btn btn-success', style: 'border-radius: 18px; width: 80%' %>
-    </div>
+    <%= render 'points/form', f: f %>
   <% end %>
 </div>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm2rSuphVK9QJyiyPkd4LN1SQj7yeMnw0&region=RU&&libraries=places"></script>

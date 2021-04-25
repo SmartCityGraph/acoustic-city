@@ -1,7 +1,8 @@
 class PointsController < ApplicationController
   before_action :set_point, only: [:edit, :update, :destroy]
   def index
-    @points = Point.all
+    @q =  Point.ransack(params[:q])
+    @points = @q.result.page(params[:page]).per(50)
   end
 
   def create
