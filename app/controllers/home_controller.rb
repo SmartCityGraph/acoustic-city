@@ -13,7 +13,7 @@ class HomeController < ApplicationController
   end
 
   def heatmap
-    @points = Point.where.not(lat: [nil, 0.0], lon: [nil, 0.0])
+    @points = Point.where.not(lat: [nil, 0.0], lon: [nil, 0.0], decibel: nil)
   end
 
   private
