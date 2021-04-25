@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
   def index
     @point = Point.new
-    @points = Point.where.not(lat: [nil, 0.0], lon: [nil, 0.0]).order(:id)
+    @points = Point.where.not(lat: [nil, 0.0], lon: [nil, 0.0], decibel: nil).order(:id)
   end
 
   def add

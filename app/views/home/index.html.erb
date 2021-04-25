@@ -137,13 +137,14 @@
               {
                   map: map,
                   position: {lat: <%= point.lat %>, lng: <%= point.lon %>},
+                  label: '<%= point.decibel.round %>',
                   icon: {
                       path: google.maps.SymbolPath.CIRCLE,
                       fillColor: '<%= get_color(point) %>',
                       fillOpacity: 0.6,
                       strokeColor: '#000',
                       strokeWeight: 1,
-                      scale: 8,
+                      scale: 16,
                   }
               });
         marker<%= point.id %>.addListener('click', function(event) {
