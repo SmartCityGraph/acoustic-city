@@ -324,7 +324,7 @@
         max: 9999,
         data: [
             <% @points.each do |point| %>
-              {lat: <%= point.lat %>, lng:<%= point.lon %>, count: <%= (point.decibel/10).round %>},
+              {lat: <%= point.lat %>, lng:<%= point.lon %>, count: <%= point.decibel %>},
             <% end %>
         ]
     };
